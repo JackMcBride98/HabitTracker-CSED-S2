@@ -2,6 +2,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 // This panel is a template for a display for all habits. Currently it displays the name of the habit and a checkbox.
+// This is a comment.
 public class Habit extends JPanel {
 
 	private String name;
