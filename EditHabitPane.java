@@ -1,6 +1,8 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -33,13 +35,22 @@ public class EditHabitPane extends JDialog{
 		// this sets what the edit button should do when pressed.
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				habit.setName(editTextField.getText());
-				habitTracker.update();
-				dispose();
+				if ( !editTextField.getText().equals("")) {
+					habit.setName(editTextField.getText());
+					habitTracker.update();
+					dispose();
+				}
 			}
 		});
 		editTextField = new JTextField(15);
 		editTextField.setText(habit.getName());
+		editTextField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				if ( editTextField.getText().length() > 20) {
+					e.consume();
+				}
+			}
+		});
 		setLayout(new FlowLayout());
 		setTitle("Edit Habit");
 		add(editText);

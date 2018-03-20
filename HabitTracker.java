@@ -1,6 +1,8 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -30,6 +32,13 @@ public class HabitTracker extends JFrame implements ActionListener{
 		setTitle("Habit Tracker");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addHabitTextField = new JTextField(30);
+		addHabitTextField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				if ( addHabitTextField.getText().length() > 20) {
+					e.consume();
+				}
+			}
+		});
 		addHabitButton = new JButton("Add Habit");
 		addHabitButton.addActionListener(this);
 		addHabitPanel = new JPanel();
@@ -111,11 +120,12 @@ public class HabitTracker extends JFrame implements ActionListener{
 	// this method is called whenever the add a habit button is pressed and it creates a new habit with the text given and then makes it visible.
 	@Override
 	public void actionPerformed(ActionEvent e ) {
-		if (addHabitTextField.getText() != null) {
+		if (!addHabitTextField.getText().equals("")) {
 			Habit newHabit;
 			habits.add(newHabit = new Habit(addHabitTextField.getText(), this));
 			addHabitTextField.setText("");
 			add(newHabit);
+			saveHabits();
 			pack();
 		}
 	}
