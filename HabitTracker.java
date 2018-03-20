@@ -23,7 +23,7 @@ public class HabitTracker extends JFrame implements ActionListener{
 	private JTextField addHabitTextField;
 	private ArrayList<Habit> habits;
 	
-	
+	// The constructor initialises the fields, sets up and orders the components, then loads the habits an displays everything and sets it up so that when closed the habits will be saved.
 	public HabitTracker() {
 		habits = new ArrayList<Habit>();
 		setLayout(new FlowLayout());
@@ -46,7 +46,15 @@ public class HabitTracker extends JFrame implements ActionListener{
 			}
 		});	
  	}
+	
+	// This deletes a specified habit and then updates the display.
+	public void deleteHabit(Habit h) {
+		removeHabits();
+		habits.remove(h);
+		displayHabits();
+	}
 
+	// this saves the habits to the file.
 	public void saveHabits() {
 		try {
 			PrintWriter pw = new PrintWriter(new FileWriter("Data.txt"));
@@ -59,29 +67,37 @@ public class HabitTracker extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void save(String habit) {
-		try {
-			PrintWriter pw = new PrintWriter(new FileWriter("Data.txt"));
-			pw.println(habit);
-			pw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+	// this makes the habits visible by adding them to the frame and then packing the frame.
 	public void displayHabits() {
 		for(Habit h: habits) {
 			add(h);
 		}
+		pack();
 	}
 	
+	// this makes the habits invisible by removing them from the frame and then packing the frame.
+	public void removeHabits() {
+		for (Habit h: habits) {
+			remove(h);
+		}
+		pack();
+	}
+	
+	// this just updates the habits, for example if the name of a habit is changed.
+	public void update() {
+		removeHabits();
+		displayHabits();
+		pack();
+	}
+	
+	// this loads the habits from file into the habits array list.
 	public void loadHabits() {
 		try {
 			FileReader fileReader = new FileReader("Data.txt");
 			BufferedReader br = new BufferedReader(fileReader);
 			String savedHabit;
 			while( (savedHabit = br.readLine()) != null ) {
-				habits.add(new Habit(savedHabit));
+				habits.add(new Habit(savedHabit,this));
 			}
 			br.close();
 			fileReader.close();
@@ -92,19 +108,20 @@ public class HabitTracker extends JFrame implements ActionListener{
 		}
 	}
 	
+	// this method is called whenever the add a habit button is pressed and it creates a new habit with the text given and then makes it visible.
 	@Override
 	public void actionPerformed(ActionEvent e ) {
 		if (addHabitTextField.getText() != null) {
 			Habit newHabit;
-			habits.add(newHabit = new Habit(addHabitTextField.getText()));
+			habits.add(newHabit = new Habit(addHabitTextField.getText(), this));
 			addHabitTextField.setText("");
 			add(newHabit);
 			pack();
 		}
 	}
 	
+	// main method simply makes a habit tracker.
 	public static void main(String[] args) {
 		HabitTracker habitTracker = new HabitTracker();
 	}
 }
-
