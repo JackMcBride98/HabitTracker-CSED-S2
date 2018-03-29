@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,8 +14,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -24,6 +27,10 @@ public class HabitTracker extends JFrame implements ActionListener{
 	private JButton addHabitButton;
 	private JTextField addHabitTextField;
 	private ArrayList<Habit> habits;
+	private JLabel usernameLabel;
+	private JTextField usernameTextField;
+	private String username;
+
 	
 	// The constructor initialises the fields, sets up and orders the components, then loads the habits an displays everything and sets it up so that when closed the habits will be saved.
 	public HabitTracker() {
@@ -44,17 +51,50 @@ public class HabitTracker extends JFrame implements ActionListener{
 		addHabitPanel = new JPanel();
 		addHabitPanel.add(addHabitTextField);
 		addHabitPanel.add(addHabitButton);
-		add(addHabitPanel);
-		loadHabits();
-		displayHabits();
-		pack();
-		setVisible(true);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				saveHabits();
 			}
 		});	
+		usernameLabel = new JLabel("Username");
+		usernameTextField = new JTextField(30);
+		usernameTextField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				if ( addHabitTextField.getText().length() > 20) {
+					e.consume();
+				}
+			}
+		});
+		usernameTextField.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				username = usernameTextField.getText();
+				setTitle("Habit Tracker - " + username);
+				closeLoginInterface();
+				openMainInterface();
+			}
+		});
+		openLoginInterface();
  	}
+	
+	public void openLoginInterface() {
+		add(usernameLabel);
+		add(usernameTextField);
+		pack();
+		setVisible(true);
+	}
+	
+	public void closeLoginInterface() {
+		remove(usernameLabel);
+		remove(usernameTextField);
+	}
+	
+	public void openMainInterface() {
+		add(addHabitPanel);
+		loadHabits();
+		displayHabits();
+		pack();
+		setVisible(true);
+	}
 	
 	// This deletes a specified habit and then updates the display.
 	public void deleteHabit(Habit h) {
@@ -66,7 +106,7 @@ public class HabitTracker extends JFrame implements ActionListener{
 	// this saves the habits to the file.
 	public void saveHabits() {
 		try {
-			PrintWriter pw = new PrintWriter(new FileWriter("Data.txt"));
+			PrintWriter pw = new PrintWriter(new FileWriter(username + "Data.txt"));
 			for(Habit h: habits) {
 				pw.println(h.getName());
 			}
@@ -102,7 +142,7 @@ public class HabitTracker extends JFrame implements ActionListener{
 	// this loads the habits from file into the habits array list.
 	public void loadHabits() {
 		try {
-			FileReader fileReader = new FileReader("Data.txt");
+			FileReader fileReader = new FileReader(username + "Data.txt");
 			BufferedReader br = new BufferedReader(fileReader);
 			String savedHabit;
 			while( (savedHabit = br.readLine()) != null ) {
@@ -111,7 +151,12 @@ public class HabitTracker extends JFrame implements ActionListener{
 			br.close();
 			fileReader.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			File newUserFile = new File(username + "Data.txt");
+			try {
+				newUserFile.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} catch (IOException er) {
 			er.printStackTrace();
 		}
