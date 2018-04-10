@@ -72,7 +72,11 @@ public class Habit extends JPanel {
 	public String getName(){
 		return name;
 	}
-	
+
+	public ArrayList<Calendar> getHistory(){
+	    return history;
+    }
+
 	public void showDetails() {
 		add(editButton);
 		habitTracker.pack();
