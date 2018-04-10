@@ -1,3 +1,0 @@
-run 5k
-do 20 push ups.
-practice piano
