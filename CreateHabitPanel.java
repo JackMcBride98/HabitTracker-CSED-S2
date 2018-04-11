@@ -24,7 +24,9 @@ public class CreateHabitPanel extends JPanel {
         habitNameField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               createNewHabit();
+                if (!habitNameField.getText().equals("")) {
+                    createNewHabit();
+                }
             }
         });
         createButton.addActionListener(new ActionListener() {
@@ -34,7 +36,7 @@ public class CreateHabitPanel extends JPanel {
                     showCreateHabit();
                 }
                 else{
-                    if ( habitNameField.getText() != null) {
+                    if (!habitNameField.getText().equals("")) {
                         createNewHabit();
                     }
                 }
