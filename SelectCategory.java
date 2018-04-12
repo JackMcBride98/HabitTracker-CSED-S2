@@ -8,7 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 
-public class SelectCategory extends JFrame{
+public class SelectCategory extends JPanel{
 	//Change to JPanel add add to select days panel? to create.. details panel?
 	//Works as is for now.
 	
@@ -27,7 +27,7 @@ public class SelectCategory extends JFrame{
 		//Create new frame with drop down box(?) of categories
 		String[] categories = {"Exercise", "Diet", "Water", "Productivity", "Custom"};
 		JButton okButton = new JButton("Ok");
-		JComboBox categoryList = new JComboBox(categories);
+		JComboBox<String> categoryList = new JComboBox<String>(categories);
 		//categories.setSelectedIndex(4);
 		//categories.addActionListener(this);
 		
@@ -36,15 +36,15 @@ public class SelectCategory extends JFrame{
 				
 					setVisible(false);
 					habit.setCategory((String)categoryList.getSelectedItem());
-					habitTracker.setVisible(true);
+					
 				
 				
 			}
 		});
 		
 		add(categoryList);
-		add(okButton);
-		pack();
+		//add(okButton);
+		//pack();
 		
 		
 	}

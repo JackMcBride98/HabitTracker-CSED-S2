@@ -34,7 +34,7 @@ public class Habit extends JPanel {
 	private JCheckBox checkBox;
 	private JButton detailsButton;
 	private JButton editButton;
-	private SelectDaysPanel selectDaysPanel;
+	private ChooseDetailsFrame chooseDetailsFrame;
 	
 	
 	public Habit(String name, String username, HabitTracker habitTracker) {
@@ -43,10 +43,10 @@ public class Habit extends JPanel {
 		this.habitTracker = habitTracker;
 		
 		//New frame to obtain from the user which days to complete habit on
-		selectDaysPanel = new SelectDaysPanel(habitTracker, this);
+		chooseDetailsFrame = new ChooseDetailsFrame(habitTracker, this);
 		
 		habitTracker.setVisible(false);
-		selectDaysPanel.setVisible(true);
+		chooseDetailsFrame.setVisible(true);
 		days = new boolean[7];
 		
 		
@@ -98,7 +98,7 @@ public class Habit extends JPanel {
 	public void setDays(){
 
 		for (int i = 0; i < 7; i++){
-			if (selectDaysPanel.getDays(i) == true){
+			if (chooseDetailsFrame.getDays(i) == true){
 				//System.out.println("Day " + (i+1) + " is selected.");
 				days[i] = true;
 			}
