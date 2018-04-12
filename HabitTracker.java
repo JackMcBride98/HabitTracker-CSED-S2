@@ -35,8 +35,10 @@ public class HabitTracker extends JFrame {
 
 	public void createNewHabit(String name){
 		Habit newHabit = new Habit(name, username, this);
+		
 		habits.add(newHabit);
 		dailyChecklistPanel.updateHabits(habits);
+		//Add method for customizing habit here, checkboxes for each day
 		revalidate();
 		pack();
 	}

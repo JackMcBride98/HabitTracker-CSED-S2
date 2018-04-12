@@ -16,7 +16,10 @@ public class SelectDaysPanel extends JFrame{
 	private JButton okButton;
 	
 	public SelectDaysPanel(HabitTracker habitTracker, Habit habit){
-		System.out.println("Showing day selector??");
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//System.out.println("Showing day selector??");
+		
 		this.habitTracker = habitTracker;
 		setLayout(new FlowLayout());
 		createDayCheckbox("Monday", 0);
@@ -38,11 +41,15 @@ public class SelectDaysPanel extends JFrame{
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Check that at least one day is selected
-				setVisible(false);
-				habitTracker.setVisible(true);
-				habit.daysSelected = true;
-				habit.setDays();
-				//Finish
+				if (validSelection()){
+					SelectCategory selectCategory = new SelectCategory(habitTracker, habit);
+					setVisible(false);
+					selectCategory.setVisible(true);
+					habit.daysSelected = true;
+					habit.setDays();
+					//this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+					//Finish
+				}
 			}
 		});
 		
@@ -62,6 +69,20 @@ public class SelectDaysPanel extends JFrame{
 		add(checkBox);
 		//System.out.println("Adding day " + day + " to selector");
 		pack();
+		
+	}
+	
+	public boolean validSelection(){
+		
+		for (int i = 0; i < 7; i++){
+			
+			if (checkBoxArray[i].isSelected()){
+				return true;
+			}
+			
+		}
+		
+		return false;
 		
 	}
 	
