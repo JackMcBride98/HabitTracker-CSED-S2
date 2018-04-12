@@ -9,13 +9,13 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
 
-public class SelectDaysPanel extends JFrame{
+public class ChooseDetailsFrame extends JFrame{
 	
 	private HabitTracker habitTracker;
 	private JCheckBox[] checkBoxArray = new JCheckBox[7];
 	private JButton okButton;
 	
-	public SelectDaysPanel(HabitTracker habitTracker, Habit habit){
+	public ChooseDetailsFrame(HabitTracker habitTracker, Habit habit){
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//System.out.println("Showing day selector??");
@@ -33,8 +33,8 @@ public class SelectDaysPanel extends JFrame{
 		okButton = new JButton("Ok");
 		
 		
-		
-		
+		SelectCategory selectCategory = new SelectCategory(habitTracker, habit);
+		add(selectCategory);
 		
 		
 		add(okButton);
@@ -47,6 +47,7 @@ public class SelectDaysPanel extends JFrame{
 					selectCategory.setVisible(true);
 					habit.daysSelected = true;
 					habit.setDays();
+					habitTracker.setVisible(true);
 					//this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 					//Finish
 				}
