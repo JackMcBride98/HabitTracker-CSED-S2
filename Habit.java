@@ -77,6 +77,13 @@ public class Habit extends JPanel {
 
 			}
 		});
+		
+			editButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editFeature();
+			}
+		});
+		
 		add(nameLabel);
 		add(checkBox);
 		add(detailsButton);
@@ -93,6 +100,10 @@ public class Habit extends JPanel {
 
 	public String getName(){
 		return name;
+	}
+	
+	public void editFeature() {
+		EditFeature edit = new EditFeature(name, this);
 	}
 
 	public Date getDateCreated(){return dateCreated;}
@@ -141,6 +152,25 @@ public class Habit extends JPanel {
 	public String getCategory(){
 		return category;
 	}
+	
+	public void deleteName() {
+		String temp = habitTracker.returnUsername() + this.name;
+		this.name = "";
+		this.remove(checkBox);
+		this.remove(editButton);
+		this.remove(detailsButton);
+		this.remove(nameLabel);
+		File file = new File(temp);
+		System.out.println(temp);
+		file.delete();
+		habitTracker.pack();
+	}
+	
+	public void refreshLabel(String name) {
+		nameLabel.setText(name);
+		habitTracker.pack();
+	}
+
 	
 	//loads in the stored habit data from file.
 	public void loadData() {

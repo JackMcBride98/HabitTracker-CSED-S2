@@ -83,6 +83,10 @@ public class HabitTracker extends JFrame {
 		pack();
 	}
 	
+	public String returnUsername() {
+		return username;
+	}
+	
 	public static void main(String[] args) {
 		HabitTracker habitTracker = new HabitTracker();
 	}
