@@ -1,42 +1,50 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class HabitHistoryPanel extends JFrame {
+public class HabitHistoryPanel extends JPanel {
 
     private Habit habit;
-    private ArrayList<Calendar> habitHistory;
-    private Calendar dateCreated;
-    private JLabel[] dates;
-    private Calendar currentDate;
     private JLabel month;
+    private JButton leftButton;
+    private JButton rightButton;
+    private MonthPanel monthPanel;
+    private Date currentDate;
 
 
-    public HabitHistoryPanel(){
-        //this.habit = habit;
-        //habitHistory = habit.getHistory();
-        //dateCreated = habitHistory.get(0);
-        //habitHistory.remove(0);
-        setLayout(new BorderLayout());
-        habitHistory = new ArrayList<Calendar>();
-        Calendar newDate = Calendar.getInstance();
-        newDate.set(2018, Calendar.APRIL, 9);
-        habitHistory.add(newDate);
-        newDate.set(2018, Calendar.APRIL, 7);
-        habitHistory.add(newDate);
-        currentDate = Calendar.getInstance();
-        System.out.println(currentDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
-        month = new JLabel(currentDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
-        add(month, BorderLayout.PAGE_START);
-        add(new MonthPanel(30, new int[] {7,9}, dateCreated), BorderLayout.CENTER);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
-        pack();
+    public HabitHistoryPanel(Habit habit){
+        this.habit = habit;
+        currentDate = new Date();
+        add(leftButton = new JButton("<"),BorderLayout.PAGE_START);
+        add(month = new JLabel(currentDate.getMonthText()),BorderLayout.PAGE_START);
+        add(rightButton = new JButton(">"), BorderLayout.PAGE_START);
+        add(monthPanel = new MonthPanel(habit.getHistory(), habit.getDateCreated()),BorderLayout.CENTER);
+        leftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                monthDown();
+            }
+        });
+        rightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                monthUp();
+            }
+        });
     }
 
-    public static void main(String[] args){
-        new HabitHistoryPanel();
+    public void monthDown(){
+        currentDate.decrementMonth();
+        month.setText(currentDate.getMonthText());
+    }
+
+    public void monthUp(){
+        currentDate.incrementMonth();
+        month.setText(currentDate.getMonthText());
     }
 }

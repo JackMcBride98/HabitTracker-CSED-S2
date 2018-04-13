@@ -23,54 +23,56 @@ public class Habit extends JPanel {
 	private String name;
 	private File data;
 	private String username;
-	private Calendar dateCreated;
-	private boolean[] days;
-	public boolean daysSelected;
-	private ArrayList<Calendar> history;
+	private Date dateCreated;
+	private boolean[] days; 
+	private ArrayList<Date> history;
 	private HabitTracker habitTracker;
-	private String category;
+	private HabitHistoryPanel hhp;
 	
 	private JLabel nameLabel;
 	private JCheckBox checkBox;
 	private JButton detailsButton;
 	private JButton editButton;
-	private ChooseDetailsFrame chooseDetailsFrame;
+	private Boolean detailsShow;
 	
 	
 	public Habit(String name, String username, HabitTracker habitTracker) {
 		this.name = name;
 		this.username = username;
 		this.habitTracker = habitTracker;
-		
-		//New frame to obtain from the user which days to complete habit on
-		chooseDetailsFrame = new ChooseDetailsFrame(habitTracker, this);
-		
-		habitTracker.setVisible(false);
-		chooseDetailsFrame.setVisible(true);
+		detailsShow = false;
 		days = new boolean[7];
-		
-		
-		
-		
 		data = new File(username + name + ".txt");
 		loadData();
+        hhp = new HabitHistoryPanel(this);
 		nameLabel = new JLabel(name);
 		checkBox = new JCheckBox();
 		editButton = new JButton("Edit");
 		checkBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+                Date currentDate = new Date();
 				if(checkBox.isSelected()) {
-					history.add(Calendar.getInstance());
-				}
+                    if (!history.contains(currentDate)) {
+                        history.add(currentDate);
+                    }
+                }
 				else {
-					history.remove(history.size()-1);
+					history.remove(currentDate);
 				}
 			}
 		});
 		detailsButton = new JButton("More Info*");
 		detailsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showDetails();
+			    if ( !detailsShow){
+                    showDetails();
+                    detailsShow = true;
+                }
+                else {
+			        hideDetails();
+			        detailsShow = false;
+                }
+
 			}
 		});
 		add(nameLabel);
@@ -86,49 +88,41 @@ public class Habit extends JPanel {
 		return name;
 	}
 
-	public ArrayList<Calendar> getHistory(){
+	public Date getDateCreated(){return dateCreated;}
+
+	public ArrayList<Date> getHistory(){
 	    return history;
     }
 
 	public void showDetails() {
 		add(editButton);
+		add(hhp);
+		detailsButton.setText("Hide Info");
+		habitTracker.revalidate();
 		habitTracker.pack();
 	}
-	
-	public void setDays(){
 
-		for (int i = 0; i < 7; i++){
-			if (chooseDetailsFrame.getDays(i) == true){
-				//System.out.println("Day " + (i+1) + " is selected.");
-				days[i] = true;
-			}
-			else{
-				days[i] = false;
-				
-			}
-		}
-		
-		
-	}
-	
-	public void setCategory(String cat){
-		category = cat;
-		System.out.println("Category is: " + cat);
-	}
+	public void hideDetails(){
+	    remove(editButton);
+	    remove(hhp);
+	    detailsButton.setText("More Info");
+	    habitTracker.revalidate();
+	    habitTracker.pack();
+    }
 	
 	//loads in the stored habit data from file.
 	public void loadData() {
 		try {
 			ObjectInputStream objectReader = new ObjectInputStream(new FileInputStream(data));
-			days = (boolean[]) objectReader.readObject();
-			history = (ArrayList<Calendar>) objectReader.readObject();
-			dateCreated = history.get(0);
+			ArrayList<Object> objects = (ArrayList<Object>) objectReader.readObject();
+			days =  (boolean[]) objects.get(0);
+			history = (ArrayList<Date> )objects.get(1);
+			dateCreated = (Date) objects.get(2);
 			objectReader.close();
 		} catch (FileNotFoundException e) {
-				dateCreated = Calendar.getInstance();
+				dateCreated = new Date();
 				days = new boolean[] {true,true,true,true,true,true,true};
-				history = new ArrayList<Calendar>();
-				history.add(dateCreated);
+				history = new ArrayList<Date>();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -140,8 +134,11 @@ public class Habit extends JPanel {
 	public void saveData() {
 		try {
 			ObjectOutputStream objectWriter = new ObjectOutputStream(new FileOutputStream(data));
-			objectWriter.writeObject(days);
-			objectWriter.writeObject(history);
+			ArrayList<Object> objects = new ArrayList<Object>();
+			objects.add(days);
+			objects.add(history);
+			objects.add(dateCreated);
+            objectWriter.writeObject(objects);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
