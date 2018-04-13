@@ -18,8 +18,8 @@ public class EditFeature extends JFrame{
     JLabel label = new JLabel("Change Habit Name:");
     JButton changeName = new JButton("Change Name");
 	
-	public EditFeature(String name, Habit habit) {
-		
+	public EditFeature(String name, Habit habit, HabitTracker habitTracker) {
+		this.habitTracker = habitTracker;
 		this.habit=habit;
 	    JTextField input = new JTextField(habit.getName());
 		
@@ -51,6 +51,7 @@ public class EditFeature extends JFrame{
 	
 	public void deleteHabit(String habitName) {
 		frame.dispose();
+		habitTracker.getHabits().remove(habit); // new
 		habit.deleteName();
 	}
 	

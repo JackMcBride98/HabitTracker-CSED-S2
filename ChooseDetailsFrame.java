@@ -14,7 +14,8 @@ public class ChooseDetailsFrame extends JFrame{
 	private HabitTracker habitTracker;
 	private JCheckBox[] checkBoxArray = new JCheckBox[7];
 	private JButton okButton;
-	
+	private boolean[] days;
+
 	public ChooseDetailsFrame(HabitTracker habitTracker, Habit habit){
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +46,7 @@ public class ChooseDetailsFrame extends JFrame{
 					SelectCategory selectCategory = new SelectCategory(habitTracker, habit);
 					setVisible(false);
 					selectCategory.setVisible(true);
-					habit.setDays();
+					habit.setDays(getDaysArray());
 					habitTracker.setVisible(true);
 					//this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 					//Finish
@@ -85,6 +86,19 @@ public class ChooseDetailsFrame extends JFrame{
 		return false;
 		
 	}
+
+	public boolean[] getDaysArray(){
+	    boolean[] days = new boolean[7];
+	    for (int i=0; i < 7; i++){
+	        if (checkBoxArray[i].isSelected()){
+	            days[i] = true;
+            }
+            else{
+	            days[i] = false;
+            }
+        }
+        return days;
+    }
 	
 	public Boolean getDays(int day){
 		

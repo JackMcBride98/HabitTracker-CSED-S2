@@ -11,7 +11,7 @@ public class Date implements Serializable {
     public Date(){
         date = Calendar.getInstance();
         day = date.get(Calendar.DAY_OF_MONTH);
-        month = date.get(Calendar.MONTH);
+        month = date.get(Calendar.MONTH) + 1;
         year = date.get(Calendar.YEAR);
     }
 

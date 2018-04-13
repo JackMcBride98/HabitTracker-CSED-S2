@@ -89,9 +89,7 @@ public class Habit extends JPanel {
 		add(detailsButton);
 		
 		
-		chooseDetailsFrame = new ChooseDetailsFrame(habitTracker, this);
-		habitTracker.setVisible(false);
-		chooseDetailsFrame.setVisible(true);
+
 	}
 
 	public boolean[] getDays(){
@@ -103,7 +101,7 @@ public class Habit extends JPanel {
 	}
 	
 	public void editFeature() {
-		EditFeature edit = new EditFeature(name, this);
+		EditFeature edit = new EditFeature(name, this, habitTracker);
 	}
 
 	public Date getDateCreated(){return dateCreated;}
@@ -128,20 +126,8 @@ public class Habit extends JPanel {
 	    habitTracker.pack();
     }
 	
-	public void setDays(){
-
-		for (int i = 0; i < 7; i++){
-			if (chooseDetailsFrame.getDays(i) == true){
-				//System.out.println("Day " + (i+1) + " is selected.");
-				days[i] = true;
-			}
-			else{
-				days[i] = false;
-				
-			}
-		}
-		
-		
+	public void setDays(boolean[] days){
+		this.days = days;
 	}
 	
 	public void setCategory(String cat){
@@ -154,16 +140,18 @@ public class Habit extends JPanel {
 	}
 	
 	public void deleteName() {
-		String temp = habitTracker.returnUsername() + this.name;
+
 		this.name = "";
 		this.remove(checkBox);
 		this.remove(editButton);
-		this.remove(detailsButton);
 		this.remove(nameLabel);
-		File file = new File(temp);
-		System.out.println(temp);
-		file.delete();
-		habitTracker.pack();
+		if ( detailsShow){
+		    remove(hhp);
+        }
+        remove(detailsButton);
+        data.delete();
+        habitTracker.revalidate();
+        habitTracker.pack();
 	}
 	
 	public void refreshLabel(String name) {

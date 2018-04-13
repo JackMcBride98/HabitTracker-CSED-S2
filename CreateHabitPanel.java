@@ -8,6 +8,7 @@ public class CreateHabitPanel extends JPanel {
     private JButton createButton;
     private JTextField habitNameField;
     private HabitTracker habitTracker;
+    private ChooseDetailsFrame chooseDetailsFrame;
 
     public CreateHabitPanel(HabitTracker habitTracker){
         this.habitTracker = habitTracker;

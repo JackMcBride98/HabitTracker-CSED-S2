@@ -21,7 +21,7 @@ public class HabitHistoryPanel extends JPanel {
         this.habit = habit;
         currentDate = new Date();
         add(leftButton = new JButton("<"),BorderLayout.PAGE_START);
-        add(month = new JLabel(currentDate.getMonthText()),BorderLayout.PAGE_START);
+        add(month = new JLabel(currentDate.getMonthText() + "\n" + currentDate.getYear()),BorderLayout.PAGE_START);
         add(rightButton = new JButton(">"), BorderLayout.PAGE_START);
         add(monthPanel = new MonthPanel(habit.getHistory(), habit.getDateCreated()),BorderLayout.CENTER);
         leftButton.addActionListener(new ActionListener() {
@@ -40,11 +40,13 @@ public class HabitHistoryPanel extends JPanel {
 
     public void monthDown(){
         currentDate.decrementMonth();
-        month.setText(currentDate.getMonthText());
+        month.setText(currentDate.getMonthText() + "\n" + currentDate.getYear());
+        monthPanel.monthDown();
     }
 
     public void monthUp(){
         currentDate.incrementMonth();
-        month.setText(currentDate.getMonthText());
+        month.setText(currentDate.getMonthText() + "\n" + currentDate.getYear());
+        monthPanel.monthUp();
     }
 }

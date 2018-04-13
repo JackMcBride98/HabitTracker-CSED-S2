@@ -36,6 +36,9 @@ public class HabitTracker extends JFrame {
 	public void createNewHabit(String name){
 		Habit newHabit = new Habit(name, username, this);
 		habits.add(newHabit);
+        ChooseDetailsFrame chooseDetailsFrame = new ChooseDetailsFrame(this,newHabit );
+        setVisible(false);
+        chooseDetailsFrame.setVisible(true);
 		dailyChecklistPanel.updateHabits(habits);
 		revalidate();
 		pack();
@@ -86,6 +89,10 @@ public class HabitTracker extends JFrame {
 	public String returnUsername() {
 		return username;
 	}
+
+	public ArrayList<Habit> getHabits(){
+	    return habits;
+    }
 	
 	public static void main(String[] args) {
 		HabitTracker habitTracker = new HabitTracker();

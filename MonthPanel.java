@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class MonthPanel extends JPanel {
 
     private int daysInMonth;
-    private int[] daysCompleted;
     private JLabel[] days;
     private Date dateCreated;
     private Date currentDate;
@@ -17,6 +16,7 @@ public class MonthPanel extends JPanel {
         currentDate = new Date();
         setLayout(new GridLayout(0,7));
         days = new JLabel[31];
+        createDayLabels();
         addDayLabels();
         colourDays();
         if ( history != null) {
@@ -29,15 +29,32 @@ public class MonthPanel extends JPanel {
         }
     }
 
+    public void removeDayLabels(){
+        for(int i = 0; i < daysInMonth; i++){
+            remove(days[i]);
+        }
+    }
+
     public void addDayLabels(){
         daysInMonth = currentDate.getDaysInMonth();
-        for (int i = 0; i < daysInMonth; i++){
-            days[i] = new JLabel(Integer.toString(i+1));
+        for (int i = 0; i < daysInMonth; i++) {
             add(days[i]);
+        }
+        revalidate();
+        repaint();
+    }
+
+    public void createDayLabels(){
+        for (int i = 0; i < 31; i++){
+            days[i] = new JLabel(Integer.toString(i+1));
         }
     }
 
     public void colourDays(){
+        for (int i = 0; i < 31; i++){
+            days[i].setBackground(Color.white);
+            days[i].setOpaque(true);
+        }
         if ( history != null) {
             for (Date date : history) {
                 if (date.getMonth() == currentDate.getMonth() && date.getYear() == currentDate.getYear() ) {
@@ -50,5 +67,21 @@ public class MonthPanel extends JPanel {
             days[dateCreated.getDay() - 1].setBackground(Color.CYAN);
             days[dateCreated.getDay() - 1].setOpaque(true);
         }
+    }
+
+    public void monthUp(){
+        removeDayLabels();
+        currentDate.incrementMonth();
+        addDayLabels();
+        colourDays();
+        revalidate();
+    }
+
+    public void monthDown(){
+        removeDayLabels();
+        currentDate.decrementMonth();
+        addDayLabels();
+        colourDays();
+        revalidate();
     }
 }
