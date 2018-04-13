@@ -28,12 +28,14 @@ public class Habit extends JPanel {
 	private ArrayList<Date> history;
 	private HabitTracker habitTracker;
 	private HabitHistoryPanel hhp;
+	private String category;
 	
 	private JLabel nameLabel;
 	private JCheckBox checkBox;
 	private JButton detailsButton;
 	private JButton editButton;
 	private Boolean detailsShow;
+	private ChooseDetailsFrame chooseDetailsFrame;
 	
 	
 	public Habit(String name, String username, HabitTracker habitTracker) {
@@ -78,6 +80,11 @@ public class Habit extends JPanel {
 		add(nameLabel);
 		add(checkBox);
 		add(detailsButton);
+		
+		
+		chooseDetailsFrame = new ChooseDetailsFrame(habitTracker, this);
+		habitTracker.setVisible(false);
+		chooseDetailsFrame.setVisible(true);
 	}
 
 	public boolean[] getDays(){
@@ -109,6 +116,31 @@ public class Habit extends JPanel {
 	    habitTracker.revalidate();
 	    habitTracker.pack();
     }
+	
+	public void setDays(){
+
+		for (int i = 0; i < 7; i++){
+			if (chooseDetailsFrame.getDays(i) == true){
+				//System.out.println("Day " + (i+1) + " is selected.");
+				days[i] = true;
+			}
+			else{
+				days[i] = false;
+				
+			}
+		}
+		
+		
+	}
+	
+	public void setCategory(String cat){
+		category = cat;
+		System.out.println("Category is: " + cat);
+	}
+	
+	public String getCategory(){
+		return category;
+	}
 	
 	//loads in the stored habit data from file.
 	public void loadData() {
