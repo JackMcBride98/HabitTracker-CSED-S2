@@ -85,6 +85,8 @@ public class Date implements Serializable {
     }
 
     public int getDaysInMonth(){
+        date.set(Calendar.MONTH, month-1);
+        date.set(Calendar.YEAR, year);
         return date.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }
