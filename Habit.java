@@ -37,6 +37,10 @@ public class Habit extends JPanel {
 	private Boolean detailsShow;
 	private ChooseDetailsFrame chooseDetailsFrame;
 	
+	private boolean hasGoal; // open details.. if(goal) "no goal set" else display details?
+	private int goalType; //1 = daily, 2 = weekly, 3 = monthly
+	private int goalFrequency; //How many times to be completed
+	
 	
 	public Habit(String name, String username, HabitTracker habitTracker) {
 		this.name = name;
@@ -192,5 +196,22 @@ public class Habit extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//Accessors and mutators for goal variables
+	public int getGoalType(){
+		return goalType;
+	}
+	
+	public void setGoalType(int type){
+		goalType = type;
+	}
+	
+	public int getGoalFrequency(){
+		return goalFrequency;
+	}
+	
+	public void setGoalFrequency(int freq){
+		goalFrequency = freq;
 	}
 }

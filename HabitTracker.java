@@ -3,6 +3,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 import javax.swing.*;
 
@@ -13,6 +16,9 @@ public class HabitTracker extends JFrame {
 	private CreateHabitPanel createHabitPanel;
 	private File userFile;
 	private DailyChecklistPanel dailyChecklistPanel;
+
+	private JButton goalsButton;
+	private GoalSetter goalSetter;
 	
 	public HabitTracker() {
 		loginPanel = new LoginPanel(this);
@@ -29,6 +35,15 @@ public class HabitTracker extends JFrame {
 			}
 		});
 		add(loginPanel);
+		goalsButton = new JButton("Goals"); //NEW
+		
+		goalsButton.addActionListener(new ActionListener(){//NEW
+		@Override
+			public void actionPerformed(ActionEvent e){
+				openGoals();
+			}
+		});
+		
 		setVisible(true);
 		pack();
 	}
@@ -86,6 +101,7 @@ public class HabitTracker extends JFrame {
 		loadData();
 		remove(loginPanel);
 		add(createHabitPanel);
+		add(goalsButton);
 		add(dailyChecklistPanel = new DailyChecklistPanel(habits));
 		pack();
 	}
@@ -93,6 +109,31 @@ public class HabitTracker extends JFrame {
 	public String returnUsername() {
 		return username;
 	}
+	
+	
+	public void openGoals(){ //WHOLE METHOD NEW
+		setVisible(false);
+		goalSetter = new GoalSetter(this);
+		goalSetter.setVisible(true);
+	}
+	
+	//NEW
+	public String[] getHabitNames(){
+		//perhaps obsolete but im tired
+		String[] habitNames = new String[habits.size()];
+		
+		for (int i = 0; i < habits.size(); i++){
+			habitNames[i] = (habits.get(i).getName());
+		}
+		
+		return habitNames;
+	}
+	
+	//New accessor for habits
+	public Habit getHabit(int index){
+		return habits.get(index);
+	}
+	
 
 	public ArrayList<Habit> getHabits(){
 	    return habits;
