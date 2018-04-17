@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class CreateHabitPanel extends JPanel {
     private JButton createButton;
@@ -47,12 +48,17 @@ public class CreateHabitPanel extends JPanel {
     }
 
     public void createNewHabit(){
+        ArrayList<Habit> currentHabits = habitTracker.getHabits();
+        for (Habit h: currentHabits){
+            if (h.getName().equals(habitNameField.getText())){
+                return;
+            }
+        }
         habitTracker.createNewHabit(habitNameField.getText());
         remove(habitNameField);
         habitNameField.setText("");
         habitTracker.revalidate();
         habitTracker.pack();
-
     }
 
     public void showCreateHabit(){

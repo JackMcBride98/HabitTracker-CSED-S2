@@ -46,18 +46,22 @@ public class HabitTracker extends JFrame {
 
 	//saves the users habits to file
 	public void saveData(){
-		if (!habits.isEmpty()) {
 			try {
-				PrintWriter lineWriter = new PrintWriter(new FileWriter(userFile));
-				for (Habit h : habits) {
-					h.saveData();
-					lineWriter.println(h.getName());
-				}
-				lineWriter.close();
+                PrintWriter lineWriter = new PrintWriter(new FileWriter(userFile));
+			    if (!habits.isEmpty()) {
+                    for (Habit h : habits) {
+                        h.saveData();
+                        lineWriter.println(h.getName());
+                    }
+                    lineWriter.close();
+                }
+                else{
+			        lineWriter.println();
+                }
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+
 	}
 
 	//loads the user's habits from file.
