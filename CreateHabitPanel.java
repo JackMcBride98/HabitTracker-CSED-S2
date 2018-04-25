@@ -5,21 +5,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.*;
-
-public class CreateHabitPanel extends JFrame {//changed to jframe
+public class CreateHabitPanel extends JPanel {
     private JButton createButton;
     private JTextField habitNameField;
     private HabitTracker habitTracker;
     private ChooseDetailsFrame chooseDetailsFrame;
 
     public CreateHabitPanel(HabitTracker habitTracker){
-		setLayout(new FlowLayout());
         this.habitTracker = habitTracker;
-        createButton = new JButton("Ok");
+        createButton = new JButton("Create New Habit");
         habitNameField = new JTextField(30);
         habitNameField.addKeyListener(new KeyAdapter() {
             @Override
@@ -40,19 +34,17 @@ public class CreateHabitPanel extends JFrame {//changed to jframe
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // if ( habitNameField.getParent() == null) { //COMMENTED OUT
-                 //   showCreateHabit();
-                //}
-               // else{
+                if ( habitNameField.getParent() == null) {
+                    showCreateHabit();
+                }
+                else{
                     if (!habitNameField.getText().equals("")) {
                         createNewHabit();
                     }
-               // }
+                }
             }
         });
-		add(habitNameField);
         add(createButton);
-		pack();
     }
 
     public void createNewHabit(){
@@ -63,14 +55,10 @@ public class CreateHabitPanel extends JFrame {//changed to jframe
             }
         }
         habitTracker.createNewHabit(habitNameField.getText());
-      //  remove(habitNameField);
-       // habitNameField.setText("");
-	   
-		
-		//habit.setVisible(true);
+        remove(habitNameField);
+        habitNameField.setText("");
         habitTracker.revalidate();
         habitTracker.pack();
-		dispose();
     }
 
     public void showCreateHabit(){

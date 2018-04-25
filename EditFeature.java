@@ -56,6 +56,7 @@ public class EditFeature extends JFrame{
 	}
 	
 	public void changeName(String name) {
+		habit.deleteFile();
 		habit.setName(name);
 		habit.refreshLabel(name);
 		frame.dispose();
