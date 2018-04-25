@@ -23,13 +23,13 @@ public class ChooseDetailsFrame extends JFrame{
 		
 		this.habitTracker = habitTracker;
 		setLayout(new FlowLayout());
-        createDayCheckbox("Sunday", 0);
-		createDayCheckbox("Monday", 1);
-		createDayCheckbox("Tuesday", 2);
-		createDayCheckbox("Wednesday", 3);
-		createDayCheckbox("Thursday", 4);
-		createDayCheckbox("Friday", 5);
-		createDayCheckbox("Saturday", 6);
+		createDayCheckbox("Monday", 0);
+		createDayCheckbox("Tuesday", 1);
+		createDayCheckbox("Wednesday", 2);
+		createDayCheckbox("Thursday", 3);
+		createDayCheckbox("Friday", 4);
+		createDayCheckbox("Saturday", 5);
+		createDayCheckbox("Sunday", 6);
 		
 		okButton = new JButton("Ok");
 		
