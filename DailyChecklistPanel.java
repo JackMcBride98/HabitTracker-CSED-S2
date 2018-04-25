@@ -9,6 +9,7 @@ public class DailyChecklistPanel extends JPanel {
     private JLabel name;
 
     public DailyChecklistPanel(ArrayList<Habit> habits){
+
         this.habits = habits;
         name = new JLabel("Daily CheckList");
         add(name);
@@ -23,12 +24,17 @@ public class DailyChecklistPanel extends JPanel {
     }
 
     public void updateHabits(ArrayList<Habit> habits){
+		setLayout(new GridLayout(0,1));//new
         for (Habit h: this.habits) {
             remove(h);
         }
+		 int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         this.habits = habits;
         for (Habit h: habits){
-            add(h);
+            boolean[] days = h.getDays();
+            if ( days[currentDay - 1]){
+                add(h);
+            }
         }
     }
 

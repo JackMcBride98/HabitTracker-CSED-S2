@@ -15,10 +15,15 @@ public class GoalSetter extends JFrame{
 	private int frequency;
 	private int goalType;
 	private HabitTracker habitTracker;
+	private GoalTracker goalTracker;
+	private Habit habit;
 	
 	public GoalSetter(HabitTracker habitTracker){
 		//Add drop down menu for selecting habit, frequency to be completed (?) and an ok button.
 		//Fuck knows how this will be displayed in habit tracker, just assign a variable for now? IDEA: int goalTarget(nstc) int = times per day. another variable for doing per week, month.
+		
+		habit = habitTracker.getHabit(habitNo);
+		
 		this.habitTracker = habitTracker;
 		setLayout(new FlowLayout());
 		
@@ -34,35 +39,22 @@ public class GoalSetter extends JFrame{
 		JTextField freqInput = new JTextField(2);
 		add(freqInput);
 		
-		JLabel label2 = new JLabel(" times");
+		JLabel label2 = new JLabel("times!");
 		add(label2);
 		
-		JLabel label3 = new JLabel("every ");
-		add(label3);
-		
-		String[] frequencies = {"Day", "Week", "Month"};
-		JComboBox<String> freqSelect = new JComboBox<String>(frequencies);
-		add(freqSelect);
+
 		
 		JButton okButton = new JButton("Ok");
 		add(okButton);
 		
+
+		
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!freqInput.getText().equals("")){
-					habitNo = habitSelect.getSelectedIndex();
-					if (freqSelect.getSelectedIndex() == 0){
-						goalType = 1;
-					}
-					else if (freqSelect.getSelectedIndex() == 1){
-						goalType = 2;
-					}
-					else{
-						goalType = 3;
-					}
+				if (!freqInput.getText().equals("")){					
 					frequency = Integer.parseInt(freqInput.getText());
 					setValues();
-					setVisible(false);
+					dispose();
 					habitTracker.setVisible(true);
 				}
 				
@@ -76,10 +68,12 @@ public class GoalSetter extends JFrame{
 	private void setValues(){
 		Habit habit;
 		habit = habitTracker.getHabit(habitNo);
+		habit.setHasGoal(true);
 		habit.setGoalType(goalType);
 		habit.setGoalFrequency(frequency);
+		habit.setGoal(frequency);
 		
-		System.out.println("Goal created for habit: " + habit.getName() + " to be completed " + frequency + " times every " + goalType);
+		System.out.println("Goal created for habit: " + habit.getName() + " to be completed " + frequency + "% of times");
 	}
 	
 }

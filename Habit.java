@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 
 public class Habit extends JPanel {
 	private String name;
+	
 	private String username;
 	private Date dateCreated;
 	private boolean[] days; 
@@ -35,11 +36,16 @@ public class Habit extends JPanel {
 	private JButton editButton;
 	private Boolean detailsShow;
 	private ChooseDetailsFrame chooseDetailsFrame;
+	private JLabel streaks;
+	private JLabel percentage;
+	
 	
 	private boolean hasGoal; // open details.. if(goal) "no goal set" else display details?
 	private int goalType; //1 = daily, 2 = weekly, 3 = monthly
 	private int goalFrequency; //How many times to be completed
-	
+	private int goal; //% completion.
+	private GoalTracker goalTracker;
+	private JLabel goalLabel;
 	
 	public Habit(String name, String username, HabitTracker habitTracker) {
 		this.name = name;
@@ -51,18 +57,31 @@ public class Habit extends JPanel {
         hhp = new HabitHistoryPanel(this);
 		nameLabel = new JLabel(name);
 		checkBox = new JCheckBox();
+		
+		streaks = new JLabel();
+		percentage = new JLabel();
+		Date today = new Date();
+        for ( Date date: history){
+            if ( date.getYear() == today.getYear() && date.getMonth() == today.getMonth() && date.getDay() == today.getDay()){
+                checkBox.setSelected(true);
+            }
+        }
+		
 		editButton = new JButton("Edit");
 		checkBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
                 Date currentDate = new Date();
-				if(checkBox.isSelected()) {
-                    if (!history.contains(currentDate)) {
-                        history.add(currentDate);
-                    }
+				 Date toRemove;
+				if(!checkBox.isSelected()) {
+				    history.removeIf(date -> date.getYear() == currentDate.getYear() && date.getMonth() == currentDate.getMonth() && date.getDay() == currentDate.getDay());
                 }
 				else {
-					history.remove(currentDate);
+					history.add(currentDate);
 				}
+				hhp.update(history);
+				updateStreak();
+				updatePercentage();
+				habitTracker.revalidate();
 			}
 		});
 		detailsButton = new JButton("More Info*");
@@ -90,6 +109,8 @@ public class Habit extends JPanel {
 		add(checkBox);
 		add(detailsButton);
 		
+		
+
 	}
 
 	public boolean[] getDays(){
@@ -111,16 +132,97 @@ public class Habit extends JPanel {
     }
 
 	public void showDetails() {
+		//MAY HAVE TO FIDDLE
+		
 		add(editButton);
 		add(hhp);
+		updateStreak();
+		add(streaks);
+		updatePercentage();
+		add(percentage);
 		detailsButton.setText("Hide Info");
 		habitTracker.revalidate();
 		habitTracker.pack();
+		if (hasGoal){
+			System.out.println("Displaying goal status");
+			goalLabel = new JLabel("You have completed " + goalTracker.getCompletion() + "% of your goal!");
+			add(goalLabel);
+		}else
+		{
+			System.out.println("NOP");
+		}
+		
+		habitTracker.revalidate();
+		habitTracker.pack();
 	}
+	
+	public void updateStreak(){
+        int streak = 0;
+        Date currentDate = new Date();
+		Date testDate = new Date(dateCreated.getDay(), dateCreated.getMonth(), dateCreated.getYear());
+		testDate.decrementDay();
+		boolean completed;
+        do {
+			testDate.incrementDay();
+            if ( days[testDate.getDayOfWeek()-1]){
+				completed = false;
+                for ( Date d: history){
+                    if ( d.isEqual(testDate)){
+                        streak++;
+						completed = true;
+                    }
+                }
+				if (!completed){
+					streak = 0;
+				}
+            }
+        } while ( !testDate.isEqual(currentDate) );
+        streaks.setText("Streak: " + streak);
+        revalidate();
+    }
+
+    public void updatePercentage(){
+	    Date testDate = new Date();
+	    int completed = 0;
+	    int total = 0;
+	    while ( !testDate.isEqual(dateCreated)) {
+	        if ( days[testDate.getDayOfWeek()-1]){
+	            total++;
+	            for ( Date d: history){
+	                if ( d.isEqual(testDate)){
+	                    completed++;
+                    }
+                }
+            }
+            testDate.decrementDay();
+        }
+        if ( days[testDate.getDayOfWeek()-1]){
+            total++;
+            for ( Date d: history){
+                if ( d.isEqual(testDate)){
+                    completed++;
+                }
+            }
+        }
+	    if ( total == 0){
+	        percentage.setText("Percentage Complete : 0%");
+        }
+        else{
+	        float percent = (float)completed / total;
+            percentage.setText("Percentage Complete: " + percent*100 + "%");
+        }
+        revalidate();
+    }
 
 	public void hideDetails(){
+		//DONT MAKE A GOAL WHILE MORE DETAILS IS OPEN
 	    remove(editButton);
 	    remove(hhp);
+		if(hasGoal){
+			remove(goalLabel);
+		}
+		 remove(streaks);
+	    remove(percentage);
 	    detailsButton.setText("More Info");
 	    habitTracker.revalidate();
 	    habitTracker.pack();
@@ -130,9 +232,18 @@ public class Habit extends JPanel {
 		this.days = days;
 	}
 	
+	//new
+	public boolean getDay(int day){
+		if (days[day] == true){
+			return true;
+		}
+		return false;
+	
+	}
+	
 	public void setCategory(String cat){
 		category = cat;
-		System.out.println("Category is: " + cat);
+		//System.out.println("Category is: " + cat);
 	}
 	
 	public String getCategory(){
@@ -150,7 +261,7 @@ public class Habit extends JPanel {
         }
         remove(detailsButton);
         File habitFile = new File(username + name + ".txt");
-        habitFile.delete();
+		habitFile.delete();
         habitTracker.revalidate();
         habitTracker.pack();
 	}
@@ -184,7 +295,7 @@ public class Habit extends JPanel {
 	//saves the habit data to file.
 	public void saveData() {
 		try {
-			ObjectOutputStream objectWriter = new ObjectOutputStream(new FileOutputStream(new File(username + name + ".txt") ));
+			ObjectOutputStream objectWriter = new ObjectOutputStream(new FileOutputStream(new File(username + name + ".txt")));
 			ArrayList<Object> objects = new ArrayList<Object>();
 			objects.add(days);
 			objects.add(history);
@@ -212,12 +323,37 @@ public class Habit extends JPanel {
 		goalFrequency = freq;
 	}
 	
-	public void setName(String newName) {
+	public int getGoal(){
+		return goal;
+	}
+	
+	public boolean hasGoal(){
+		return hasGoal;
+	}
+	
+	public void setName(String newName){
 		name = newName;
 	}
 	
-	public void deleteFile() {
-		File oldFile = new File( username + name + ".txt");
+	public void deleteFile(){
+		File oldFile = new File(username + name + ".txt");
 		oldFile.delete();
+	}
+	
+	public void setHasGoal(boolean bool){
+		hasGoal = bool;
+		System.out.println("hasGoal is undoubtedly " + bool);
+	}
+	
+	public void setGoal(int val){
+		System.out.println("Val = " + val);
+		hasGoal = true;
+		goal = val;
+		goalTracker = new GoalTracker(this, goal);
+		System.out.println("Goal Set!");
+	}
+	
+	public GoalTracker getGoalTracker(){
+		return goalTracker;
 	}
 }

@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class MonthPanel extends JPanel {
 
@@ -9,11 +11,13 @@ public class MonthPanel extends JPanel {
     private Date dateCreated;
     private Date currentDate;
     private ArrayList<Date> history;
+	private Border createBorder;
 
     public MonthPanel(ArrayList<Date> history, Date dateCreated){
         this.history = history;
         this.dateCreated = dateCreated;
         currentDate = new Date();
+		createBorder = new LineBorder(Color.BLACK,2);
         setLayout(new GridLayout(0,7));
         days = new JLabel[31];
         createDayLabels();
@@ -64,8 +68,7 @@ public class MonthPanel extends JPanel {
             }
         }
         if ( dateCreated.getMonth() == currentDate.getMonth()) {
-            days[dateCreated.getDay() - 1].setBackground(Color.CYAN);
-            days[dateCreated.getDay() - 1].setOpaque(true);
+            days[dateCreated.getDay() - 1].setBorder(createBorder);
         }
     }
 
@@ -81,6 +84,12 @@ public class MonthPanel extends JPanel {
         removeDayLabels();
         currentDate.decrementMonth();
         addDayLabels();
+        colourDays();
+        revalidate();
+    }
+	
+	public void update(ArrayList<Date> history){
+        this.history = history;
         colourDays();
         revalidate();
     }
