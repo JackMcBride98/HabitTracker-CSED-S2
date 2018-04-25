@@ -16,14 +16,20 @@ public class HabitTracker extends JFrame {
 	private CreateHabitPanel createHabitPanel;
 	private File userFile;
 	private DailyChecklistPanel dailyChecklistPanel;
+	private ViewHabitsPanel viewHabits;
 
 	private JButton goalsButton;
 	private GoalSetter goalSetter;
-	
+
+	public HabitTracker(int none){
+        dispose();
+    }
+
 	public HabitTracker() {
 		loginPanel = new LoginPanel(this);
 		createHabitPanel = new CreateHabitPanel(this);
 		habits = new ArrayList<Habit>();
+		setTitle("HabitTracker");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new FlowLayout());
 		addWindowListener(new WindowAdapter() {
@@ -36,14 +42,14 @@ public class HabitTracker extends JFrame {
 		});
 		add(loginPanel);
 		goalsButton = new JButton("Goals"); //NEW
-		
+
 		goalsButton.addActionListener(new ActionListener(){//NEW
 		@Override
 			public void actionPerformed(ActionEvent e){
 				openGoals();
 			}
 		});
-		
+
 		setVisible(true);
 		pack();
 	}
@@ -99,11 +105,14 @@ public class HabitTracker extends JFrame {
 		this.username = username;
 		userFile = new File(username + ".txt");
 		loadData();
+		viewHabits = new ViewHabitsPanel(this);
+		add(viewHabits);
 		remove(loginPanel);
 		add(createHabitPanel);
 		add(goalsButton);
 		add(dailyChecklistPanel = new DailyChecklistPanel(habits));
 		pack();
+		setTitle("HabitTracker - " + username);
 	}
 	
 	public String returnUsername() {

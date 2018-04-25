@@ -49,4 +49,8 @@ public class HabitHistoryPanel extends JPanel {
         month.setText(currentDate.getMonthText() + "\n" + currentDate.getYear());
         monthPanel.monthUp();
     }
+
+    public void update(ArrayList<Date> history){
+        monthPanel.update(history);
+    }
 }
