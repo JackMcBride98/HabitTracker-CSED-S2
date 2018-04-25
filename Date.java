@@ -1,18 +1,53 @@
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Date implements Serializable {
     private int day;
     private int month;
     private int year;
-    private Calendar date;
 
     public Date(){
-        date = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
         day = date.get(Calendar.DAY_OF_MONTH);
         month = date.get(Calendar.MONTH) + 1;
         year = date.get(Calendar.YEAR);
+    }
+
+    public Date(int day, int month, int year){
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
+
+    public boolean isEqual(Date d){
+        if ( d.getDay() == day && d.getMonth() == month && d.getYear() == year){
+            return true;
+        }
+        return false;
+    }
+
+    public int getDayOfWeek(){
+        Calendar aDate = Calendar.getInstance();
+        aDate.set(Calendar.DAY_OF_MONTH, day);
+        aDate.set(Calendar.MONTH, month - 1);
+        aDate.set(Calendar.YEAR, year);
+        return aDate.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public void decrementDay(){
+        day--;
+        if ( day < 1){
+            decrementMonth();
+            day = getDaysInMonth();
+        }
+    }
+
+    public void incrementDay(){
+        day++;
+        if ( day > getDaysInMonth()){
+            incrementMonth();
+            day = 1;
+        }
     }
 
     public void incrementMonth(){
@@ -85,8 +120,8 @@ public class Date implements Serializable {
     }
 
     public int getDaysInMonth(){
-        date.set(Calendar.MONTH, month-1);
-        date.set(Calendar.YEAR, year);
-        return date.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Calendar aDate = Calendar.getInstance();
+        aDate.set(Calendar.MONTH, month-1);
+        return aDate.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }

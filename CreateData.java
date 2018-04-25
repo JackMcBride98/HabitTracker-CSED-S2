@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 
 public class CreateData {
@@ -15,6 +12,41 @@ public class CreateData {
     }
 
     public CreateData(){
+        try {
+            System.out.println("Enter Username: ");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            while ( !reader.readLine().equals("no")) {
+                createUser(reader.readLine());
+            }
+
+        } catch (IOException e){
+
+        }
+    }
+
+    public void createUser(String username){
+        System.out.println()
+    }
+
+    public void saveData(String username, ArrayList<Habit> habits){
+        try {
+            PrintWriter lineWriter = new PrintWriter(new FileWriter(username + ".txt");
+            if (!habits.isEmpty()) {
+                for (Habit h : habits) {
+                    h.saveData();
+                    lineWriter.println(h.getName());
+                }
+                lineWriter.close();
+            }
+            else{
+                lineWriter.println();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*public CreateData(){
         userFile = new File("BEN.txt");
         habits = new ArrayList<Habit>();
         ht = new HabitTracker(0);
@@ -39,24 +71,5 @@ public class CreateData {
         habits.add(newHabit);
         habits.add(newHabit2);
         saveData();
-    }
-
-    public void saveData(){
-        try {
-            PrintWriter lineWriter = new PrintWriter(new FileWriter(userFile));
-            if (!habits.isEmpty()) {
-                for (Habit h : habits) {
-                    h.saveData();
-                    lineWriter.println(h.getName());
-                }
-                lineWriter.close();
-            }
-            else{
-                lineWriter.println();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    }*/
 }

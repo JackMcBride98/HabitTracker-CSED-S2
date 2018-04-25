@@ -36,13 +36,13 @@ public class Habit extends JPanel {
 	private JButton editButton;
 	private Boolean detailsShow;
 	private ChooseDetailsFrame chooseDetailsFrame;
+	private JLabel streaks;
+	private JLabel percentage;
 	
 	private boolean hasGoal; // open details.. if(goal) "no goal set" else display details?
 	private int goalType; //1 = daily, 2 = weekly, 3 = monthly
 	private int goalFrequency; //How many times to be completed
-	private int goal; //% completion.
-	private GoalTracker goalTracker;
-	private JLabel goalLabel;
+	
 	
 	public Habit(String name, String username, HabitTracker habitTracker) {
 		this.name = name;
@@ -55,18 +55,29 @@ public class Habit extends JPanel {
         hhp = new HabitHistoryPanel(this);
 		nameLabel = new JLabel(name);
 		checkBox = new JCheckBox();
+		streaks = new JLabel();
+		percentage = new JLabel();
+		Date today = new Date();
+        for ( Date date: history){
+            if ( date.getYear() == today.getYear() && date.getMonth() == today.getMonth() && date.getDay() == today.getDay()){
+                checkBox.setSelected(true);
+            }
+        }
 		editButton = new JButton("Edit");
 		checkBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
                 Date currentDate = new Date();
-				if(checkBox.isSelected()) {
-                    if (!history.contains(currentDate)) {
-                        history.add(currentDate);
-                    }
+                Date toRemove;
+				if(!checkBox.isSelected()) {
+				    history.removeIf(date -> date.getYear() == currentDate.getYear() && date.getMonth() == currentDate.getMonth() && date.getDay() == currentDate.getDay());
                 }
 				else {
-					history.remove(currentDate);
+					history.add(currentDate);
 				}
+				hhp.update(history);
+				updateStreak();
+				updatePercentage();
+				habitTracker.revalidate();
 			}
 		});
 		detailsButton = new JButton("More Info*");
@@ -119,28 +130,77 @@ public class Habit extends JPanel {
 	public void showDetails() {
 		add(editButton);
 		add(hhp);
+		updateStreak();
+		add(streaks);
+		updatePercentage();
+		add(percentage);
 		detailsButton.setText("Hide Info");
-		
-		if (hasGoal){
-			System.out.println("Displaying goal status");
-			goalLabel = new JLabel("You have completed " + goalTracker.getCompletion() + "% of your goal!");
-			add(goalLabel);
-		}else
-		{
-			System.out.println("NOP");
-		}
-		
 		habitTracker.revalidate();
 		habitTracker.pack();
 	}
 
+	public void updateStreak(){
+        int streak = 0;
+        Date testDate = new Date();
+        while ( !testDate.isEqual(dateCreated)){
+            if ( days[testDate.getDayOfWeek()-1]){
+                for ( Date d: history){
+                    if ( d.isEqual(testDate)){
+                        streak++;
+                    }
+                }
+            }
+            testDate.decrementDay();
+        }
+        if ( days[testDate.getDayOfWeek()-1]){
+            for ( Date d: history){
+                if ( d.isEqual(testDate)){
+                    streak++;
+                }
+            }
+        }
+        streaks.setText("Streak: " + streak);
+        revalidate();
+    }
+
+    public void updatePercentage(){
+	    Date testDate = new Date();
+	    int completed = 0;
+	    int total = 0;
+	    while ( !testDate.isEqual(dateCreated)) {
+	        if ( days[testDate.getDayOfWeek()-1]){
+	            total++;
+	            for ( Date d: history){
+	                if ( d.isEqual(testDate)){
+	                    completed++;
+                    }
+                }
+            }
+            testDate.decrementDay();
+        }
+        if ( days[testDate.getDayOfWeek()-1]){
+            total++;
+            for ( Date d: history){
+                if ( d.isEqual(testDate)){
+                    completed++;
+                }
+            }
+        }
+	    if ( total == 0){
+	        percentage.setText("Percentage Complete : 0%");
+        }
+        else{
+	        float percent = (float)completed / total;
+            percentage.setText("Percentage Complete: " + percent*100 + "%");
+        }
+        revalidate();
+    }
+
 	public void hideDetails(){
-		//DONT MAKE A GOAL WHILE MORE DETAILS IS OPEN
 	    remove(editButton);
 	    remove(hhp);
-		if(hasGoal){
-			remove(goalLabel);
-		}
+	    remove(streaks);
+	    remove(percentage);
 	    detailsButton.setText("More Info");
 	    habitTracker.revalidate();
 	    habitTracker.pack();
@@ -150,18 +210,9 @@ public class Habit extends JPanel {
 		this.days = days;
 	}
 	
-	//new
-	public boolean getDay(int day){
-		if (days[day] == true){
-			return true;
-		}
-		return false;
-	
-	}
-	
 	public void setCategory(String cat){
 		category = cat;
-		//System.out.println("Category is: " + cat);
+		System.out.println("Category is: " + cat);
 	}
 	
 	public String getCategory(){
@@ -239,29 +290,12 @@ public class Habit extends JPanel {
 	public void setGoalFrequency(int freq){
 		goalFrequency = freq;
 	}
-	
-	public int getGoal(){
-		return goal;
-	}
-	
-	public boolean hasGoal(){
-		return hasGoal;
-	}
-	
-	public void setHasGoal(boolean bool){
-		hasGoal = bool;
-		System.out.println("hasGoal is undoubtedly " + bool);
-	}
-	
-	public void setGoal(int val){
-		System.out.println("Val = " + val);
-		hasGoal = true;
-		goal = val;
-		goalTracker = new GoalTracker(this, goal);
-		System.out.println("Goal Set!");
-	}
-	
-	public GoalTracker getGoalTracker(){
-		return goalTracker;
-	}
+
+	public void setHistory(ArrayList<Date> history){
+	    this.history = history;
+    }
+
+    public void setDateCreated(Date dateCreated){
+	    this.dateCreated = dateCreated;
+    }
 }
