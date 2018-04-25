@@ -77,6 +77,7 @@ public class Habit extends JPanel {
 				hhp.update(history);
 				updateStreak();
 				updatePercentage();
+				habitTracker.revalidate();
 			}
 		});
 		detailsButton = new JButton("More Info*");

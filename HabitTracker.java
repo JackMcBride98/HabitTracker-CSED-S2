@@ -16,7 +16,6 @@ public class HabitTracker extends JFrame {
 	private CreateHabitPanel createHabitPanel;
 	private File userFile;
 	private DailyChecklistPanel dailyChecklistPanel;
-	private ViewHabitsPanel viewHabits;
 
 	private JButton goalsButton;
 	private GoalSetter goalSetter;
@@ -105,8 +104,6 @@ public class HabitTracker extends JFrame {
 		this.username = username;
 		userFile = new File(username + ".txt");
 		loadData();
-		viewHabits = new ViewHabitsPanel(this);
-		add(viewHabits);
 		remove(loginPanel);
 		add(createHabitPanel);
 		add(goalsButton);
