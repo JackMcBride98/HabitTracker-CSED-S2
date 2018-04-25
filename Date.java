@@ -1,10 +1,12 @@
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Date implements Serializable {
     private int day;
     private int month;
     private int year;
+   
 
     public Date(){
         Calendar date = Calendar.getInstance();
@@ -12,14 +14,14 @@ public class Date implements Serializable {
         month = date.get(Calendar.MONTH) + 1;
         year = date.get(Calendar.YEAR);
     }
-
-    public Date(int day, int month, int year){
+	
+	 public Date(int day, int month, int year){
         this.day = day;
         this.month = month;
         this.year = year;
     }
-
-    public boolean isEqual(Date d){
+	
+	public boolean isEqual(Date d){
         if ( d.getDay() == day && d.getMonth() == month && d.getYear() == year){
             return true;
         }
@@ -33,8 +35,8 @@ public class Date implements Serializable {
         aDate.set(Calendar.YEAR, year);
         return aDate.get(Calendar.DAY_OF_WEEK);
     }
-
-    public void decrementDay(){
+	
+	public void decrementDay(){
         day--;
         if ( day < 1){
             decrementMonth();
@@ -121,7 +123,7 @@ public class Date implements Serializable {
 
     public int getDaysInMonth(){
         Calendar aDate = Calendar.getInstance();
-        aDate.set(Calendar.MONTH, month-1);
+		aDate.set(Calendar.MONTH, month-1);
         return aDate.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }
