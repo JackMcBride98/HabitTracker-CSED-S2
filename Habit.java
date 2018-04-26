@@ -127,8 +127,16 @@ public class Habit extends JPanel {
 
 	public Date getDateCreated(){return dateCreated;}
 
+	public void setDateCreated(Date dateCreated){
+	    this.dateCreated = dateCreated;
+    }
+
 	public ArrayList<Date> getHistory(){
 	    return history;
+    }
+
+    public void setHistory(ArrayList<Date> history){
+	    this.history = history;
     }
 
 	public void showDetails() {
@@ -155,8 +163,13 @@ public class Habit extends JPanel {
 		habitTracker.revalidate();
 		habitTracker.pack();
 	}
-	
+
 	public void updateStreak(){
+        streaks.setText("Streak: " + getStreak());
+        revalidate();
+    }
+
+	public int getStreak(){
         int streak = 0;
         Date currentDate = new Date();
 		Date testDate = new Date(dateCreated.getDay(), dateCreated.getMonth(), dateCreated.getYear());
@@ -177,11 +190,15 @@ public class Habit extends JPanel {
 				}
             }
         } while ( !testDate.isEqual(currentDate) );
-        streaks.setText("Streak: " + streak);
-        revalidate();
+        return streak;
     }
 
     public void updatePercentage(){
+        percentage.setText("Percentage Complete: " + getPercentage() + "%");
+        revalidate();
+    }
+
+    public int getPercentage(){
 	    Date testDate = new Date();
 	    int completed = 0;
 	    int total = 0;
@@ -205,13 +222,12 @@ public class Habit extends JPanel {
             }
         }
 	    if ( total == 0){
-	        percentage.setText("Percentage Complete : 0%");
+	        return 0;
         }
         else{
-	        float percent = (float)completed / total;
-            percentage.setText("Percentage Complete: " + percent*100 + "%");
+	        float percent = (float)completed / total *100;
+            return (int) percent;
         }
-        revalidate();
     }
 
 	public void hideDetails(){
@@ -334,6 +350,8 @@ public class Habit extends JPanel {
 	public void setName(String newName){
 		name = newName;
 	}
+
+	public String getUsername(){return username;}
 	
 	public void deleteFile(){
 		File oldFile = new File(username + name + ".txt");

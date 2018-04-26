@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,6 @@ public class HabitTracker extends JFrame {
 	private CreateHabitPanel createHabitPanel;
 	private File userFile;
 	private DailyChecklistPanel dailyChecklistPanel;
-	private ViewHabitsPanel viewHabits;
 
 	private JButton goalsButton;
 	private GoalSetter goalSetter;
@@ -91,9 +91,44 @@ public class HabitTracker extends JFrame {
 		setVisible(false);
 	}
 
+	public void saveUsers(){
+	    try {
+	        ArrayList<String> users = new ArrayList<String>();
+            BufferedReader reader = new BufferedReader(new FileReader("users.txt"));
+            String user;
+            while ((user = reader.readLine()) != null){
+                users.add(user);
+            }
+            for(String s: users){
+                if ( s.equals(username)){
+                    usersToFile(users);
+                    return;
+                }
+            }
+            users.add(username);
+            usersToFile(users);
+        } catch (Exception e){
+
+        }
+
+    }
+
+    public void usersToFile(ArrayList<String> users){
+	    try {
+            PrintWriter pw = new PrintWriter(new FileWriter("users.txt"));
+            for (String s : users) {
+                pw.println(s);
+            }
+            pw.close();
+        } catch (IOException e){
+
+        }
+    }
+
 	//saves the users habits to file
 	public void saveData(){
 			try {
+                saveUsers();
                 PrintWriter lineWriter = new PrintWriter(new FileWriter(userFile));
 			    if (!habits.isEmpty()) {
                     for (Habit h : habits) {
@@ -174,6 +209,14 @@ public class HabitTracker extends JFrame {
 
 	public ArrayList<Habit> getHabits(){
 	    return habits;
+    }
+
+    public String getUsername(){return username;}
+
+    public void viewLeaderboards(){
+	    LeaderboardFrame lf = new LeaderboardFrame(this);
+	    this.setVisible(false);
+	    lf.setVisible(true);
     }
 	
 	public static void main(String[] args) {

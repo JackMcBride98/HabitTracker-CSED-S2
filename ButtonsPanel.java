@@ -14,11 +14,13 @@ public class ButtonsPanel extends JPanel{
 	private HabitTracker habitTracker;
 	private JButton createButton;
 	private JButton goalsButton;
+	private JButton leaderboardButton;
 	
 	public ButtonsPanel(HabitTracker habitTracker){
 		this.habitTracker = habitTracker;
 		createButton = new JButton("Create habit");
 		goalsButton = new JButton("Goals");
+		leaderboardButton = new JButton("Leaderboard");
 		addButtons();
 	}
 	
@@ -26,6 +28,7 @@ public class ButtonsPanel extends JPanel{
 		
 		add(createButton);
 		add(goalsButton);
+		add(leaderboardButton);
 		goalsButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -39,7 +42,12 @@ public class ButtonsPanel extends JPanel{
 				habitTracker.createHabit();
 			}
 		});
-		
+		leaderboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                habitTracker.viewLeaderboards();
+            }
+        });
 		
 		
 	}

@@ -11,26 +11,13 @@ public class CreateData {
         CreateData d = new CreateData();
     }
 
-    public CreateData(){
-        try {
-            System.out.println("Enter Username: ");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            while ( !reader.readLine().equals("no")) {
-                createUser(reader.readLine());
-            }
-
-        } catch (IOException e){
-
-        }
-    }
-
     public void createUser(String username){
-        System.out.println()
+        System.out.println();
     }
 
-    public void saveData(String username, ArrayList<Habit> habits){
+    public void saveData(){
         try {
-            PrintWriter lineWriter = new PrintWriter(new FileWriter(username + ".txt");
+            PrintWriter lineWriter = new PrintWriter(new FileWriter("BEN.txt"));
             if (!habits.isEmpty()) {
                 for (Habit h : habits) {
                     h.saveData();
@@ -46,7 +33,7 @@ public class CreateData {
         }
     }
 
-    /*public CreateData(){
+    public CreateData(){
         userFile = new File("BEN.txt");
         habits = new ArrayList<Habit>();
         ht = new HabitTracker(0);
@@ -71,5 +58,5 @@ public class CreateData {
         habits.add(newHabit);
         habits.add(newHabit2);
         saveData();
-    }*/
+    }
 }
