@@ -210,6 +210,19 @@ public class HabitTracker extends JFrame {
 	public ArrayList<Habit> getHabits(){
 	    return habits;
     }
+	
+	public void viewReminders(){
+		setVisible(false);
+		ReminderSetter reminderSetter = new ReminderSetter(this);
+		reminderSetter.setVisible(true);
+	}
+	
+	public void setReminder(String habitName, int timeHour, int timeMin){
+		System.out.println("Setting reminder for habit: " + habitName + " at: " + timeHour + ":" + timeMin);
+		ReminderThread newThread = new ReminderThread(habitName, username, timeHour, timeMin);
+		newThread.start();
+		
+	}
 
     public String getUsername(){return username;}
 
