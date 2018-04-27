@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,11 +18,13 @@ public class HabitHistoryPanel extends JPanel {
     private Date currentDate;
 	private JLabel goal; //new
 	private GoalTracker goalTracker; //new
-
+    private Border createBorder;
 
     public HabitHistoryPanel(Habit habit){
         this.habit = habit;
         currentDate = new Date();
+        createBorder = new LineBorder(Color.BLACK,2);
+        setBorder(createBorder);
         add(leftButton = new JButton("<"),BorderLayout.PAGE_START);
         add(month = new JLabel(currentDate.getMonthText() + "\n" + currentDate.getYear()),BorderLayout.PAGE_START);
         add(rightButton = new JButton(">"), BorderLayout.PAGE_START);

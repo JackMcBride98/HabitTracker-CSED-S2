@@ -108,7 +108,6 @@ public class LeaderboardFrame extends JFrame {
         sortHabits(toSort, comparison);
         //then for each one in order, add the username and the score
         for (int i = 0; i < toSort.size(); i++){
-            System.out.println(users.size());
             labels[(3*i)+3].setText(Integer.toString(i+1));
             leaderboard.add(labels[(3*i)+3]);
             labels[(3*i)+4].setText(toSort.get(i).getUsername());

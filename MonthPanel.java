@@ -44,8 +44,6 @@ public class MonthPanel extends JPanel {
         for (int i = 0; i < daysInMonth; i++) {
             add(days[i]);
         }
-        revalidate();
-        repaint();
     }
 
     public void createDayLabels(){
@@ -67,6 +65,7 @@ public class MonthPanel extends JPanel {
                 }
             }
         }
+        days[dateCreated.getDay() - 1].setBorder(null);
         if ( dateCreated.getMonth() == currentDate.getMonth()) {
             days[dateCreated.getDay() - 1].setBorder(createBorder);
         }
@@ -77,7 +76,7 @@ public class MonthPanel extends JPanel {
         currentDate.incrementMonth();
         addDayLabels();
         colourDays();
-        revalidate();
+        repaint();
     }
 
     public void monthDown(){
@@ -85,12 +84,11 @@ public class MonthPanel extends JPanel {
         currentDate.decrementMonth();
         addDayLabels();
         colourDays();
-        revalidate();
+        repaint();
     }
 	
 	public void update(ArrayList<Date> history){
         this.history = history;
         colourDays();
-        revalidate();
     }
 }

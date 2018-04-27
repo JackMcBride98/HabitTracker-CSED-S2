@@ -61,7 +61,7 @@ public class GoalSetter extends JFrame{
 			}
 		});
 		
-		pack();
+		revalidate();
 		
 	}
 	

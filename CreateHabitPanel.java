@@ -69,13 +69,11 @@ public class CreateHabitPanel extends JFrame {//changed to jframe
 		
 		//habit.setVisible(true);
         habitTracker.revalidate();
-        habitTracker.pack();
 		dispose();
     }
 
     public void showCreateHabit(){
         add(habitNameField);
         habitTracker.revalidate();
-        habitTracker.pack();
     }
 }

@@ -70,7 +70,7 @@ public class TemplateFrame extends JFrame{
 			}
 		});
 		
-		pack();
+		revalidate();
 		setVisible(true);
 	}
 	

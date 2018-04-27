@@ -65,7 +65,7 @@ public class ReminderSetter extends JFrame{
 			}
 		});
 		
-		pack();
+		revalidate();
 		
 		
 	}

@@ -52,7 +52,11 @@ public class EditFeature extends JFrame{
 	public void deleteHabit(String habitName) {
 		frame.dispose();
 		habitTracker.getHabits().remove(habit); // new
+        habit.hideDetails();
+        habitTracker.getDailyChecklistPanel().updateHabits(habitTracker.getHabits());
 		habit.deleteName();
+		habitTracker.revalidate();
+		habitTracker.repaint();
 	}
 	
 	public void changeName(String name) {
@@ -60,6 +64,9 @@ public class EditFeature extends JFrame{
 		habit.setName(name);
 		habit.refreshLabel(name);
 		frame.dispose();
+		habit.hideDetails();
+		habitTracker.revalidate();
+		habitTracker.repaint();
 	}
 }
 	

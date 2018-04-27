@@ -1,3 +1,5 @@
+import javafx.scene.paint.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -29,7 +31,8 @@ public class Habit extends JPanel {
 	private HabitTracker habitTracker;
 	private HabitHistoryPanel hhp;
 	private String category;
-	
+
+	private JLabel toDoToday;
 	private JLabel nameLabel;
 	private JCheckBox checkBox;
 	private JButton detailsButton;
@@ -57,13 +60,25 @@ public class Habit extends JPanel {
         hhp = new HabitHistoryPanel(this);
 		nameLabel = new JLabel(name);
 		checkBox = new JCheckBox();
-		
+        if ( !days[new Date().getDayOfWeek()-1]){
+            setOpaque(true);
+            setBackground(java.awt.Color.gray);
+            checkBox.setOpaque(true);
+            checkBox.setBackground(java.awt.Color.gray);
+
+        }
 		streaks = new JLabel();
 		percentage = new JLabel();
 		Date today = new Date();
         for ( Date date: history){
             if ( date.getYear() == today.getYear() && date.getMonth() == today.getMonth() && date.getDay() == today.getDay()){
                 checkBox.setSelected(true);
+                if ( days[new Date().getDayOfWeek()-1]){
+                    setOpaque(true);
+                    setBackground(java.awt.Color.gray);
+                    checkBox.setOpaque(true);
+                    checkBox.setBackground(java.awt.Color.gray);
+                }
             }
         }
 		
@@ -74,14 +89,27 @@ public class Habit extends JPanel {
 				 Date toRemove;
 				if(!checkBox.isSelected()) {
 				    history.removeIf(date -> date.getYear() == currentDate.getYear() && date.getMonth() == currentDate.getMonth() && date.getDay() == currentDate.getDay());
+				    if ( days[new Date().getDayOfWeek()-1]){
+                        setOpaque(false);
+                        repaint();
+                        //setBackground(java.awt.Color.gray);
+                        checkBox.setOpaque(false);
+                    }
                 }
 				else {
+				    if ( days[new Date().getDayOfWeek()-1]){
+                        setOpaque(true);
+                        setBackground(java.awt.Color.gray);
+                        repaint();
+                        checkBox.setOpaque(true);
+                        checkBox.setBackground(java.awt.Color.gray);
+                    }
 					history.add(currentDate);
 				}
 				hhp.update(history);
 				updateStreak();
 				updatePercentage();
-				habitTracker.revalidate();
+				//habitTracker.revalidate();
 			}
 		});
 		detailsButton = new JButton("More Info*");
@@ -147,7 +175,6 @@ public class Habit extends JPanel {
 		add(percentage);
 		detailsButton.setText("Hide Info");
 		habitTracker.revalidate();
-		habitTracker.pack();
 		if (hasGoal){
 			System.out.println("Displaying goal status");
 			goalLabel = new JLabel("You have completed " + goalTracker.getCompletion() + "% of your goal!");
@@ -158,12 +185,11 @@ public class Habit extends JPanel {
 		}
 		
 		habitTracker.revalidate();
-		habitTracker.pack();
 	}
 
 	public void updateStreak(){
         streaks.setText("Streak: " + getStreak());
-        revalidate();
+        //revalidate();
     }
 
 	public int getStreak(){
@@ -192,7 +218,7 @@ public class Habit extends JPanel {
 
     public void updatePercentage(){
         percentage.setText("Percentage Complete: " + getPercentage() + "%");
-        revalidate();
+        //revalidate();
     }
 
     public int getPercentage(){
@@ -234,11 +260,10 @@ public class Habit extends JPanel {
 		if(hasGoal){
 			remove(goalLabel);
 		}
-		 remove(streaks);
+		remove(streaks);
 	    remove(percentage);
 	    detailsButton.setText("More Info");
 	    habitTracker.revalidate();
-	    habitTracker.pack();
     }
 	
 	public void setDays(boolean[] days){
@@ -276,12 +301,11 @@ public class Habit extends JPanel {
         File habitFile = new File(username + name + ".txt");
 		habitFile.delete();
         habitTracker.revalidate();
-        habitTracker.pack();
 	}
 	
 	public void refreshLabel(String name) {
 		nameLabel.setText(name);
-		habitTracker.pack();
+		revalidate();
 	}
 
 	

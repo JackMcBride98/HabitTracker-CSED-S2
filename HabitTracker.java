@@ -27,6 +27,8 @@ public class HabitTracker extends JFrame {
 	public HabitTracker() {
 		loginPanel = new LoginPanel(this);
 		setTitle("HabitTracker");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(screenSize.width, screenSize.height);
 		habits = new ArrayList<Habit>();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new FlowLayout());
@@ -40,10 +42,7 @@ public class HabitTracker extends JFrame {
 		});
 		add(loginPanel);
 		buttons = new ButtonsPanel(this);
-	
-		
 		setVisible(true);
-		pack();
 	}
 
 	public void createNewHabit(String name){
@@ -54,7 +53,6 @@ public class HabitTracker extends JFrame {
         chooseDetailsFrame.setVisible(true);
 		dailyChecklistPanel.updateHabits(habits);
 		revalidate();
-		pack();
 	}
 	
 	public void createNewTemplateHabit(String name){ //NEW
@@ -80,7 +78,6 @@ public class HabitTracker extends JFrame {
 		habits.add(newHabit);
 		dailyChecklistPanel.updateHabits(habits);
 		revalidate();
-		pack();
 	}
 	
 	//NEW
@@ -177,12 +174,14 @@ public class HabitTracker extends JFrame {
 		add(dailyChecklistPanel = new DailyChecklistPanel(habits));			
 		dailyChecklistPanel.updateHabits(habits);
 		setTitle("HabitTracker - " + username);
-		pack();
+		revalidate();
 	}
 	
 	public static String returnUsername() {
 		return username;
 	}
+
+	public DailyChecklistPanel getDailyChecklistPanel(){ return dailyChecklistPanel;}
 	
 	
 	public void openGoals(){
