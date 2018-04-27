@@ -108,9 +108,6 @@ public class Habit extends JPanel {
 		add(nameLabel);
 		add(checkBox);
 		add(detailsButton);
-		
-		
-
 	}
 
 	public boolean[] getDays(){

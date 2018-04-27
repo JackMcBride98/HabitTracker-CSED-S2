@@ -49,4 +49,7 @@ public class User {
         return habits;
     }
 
+    public String getUsername(){
+        return username;
+    }
 }

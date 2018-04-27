@@ -63,8 +63,9 @@ public class LeaderboardFrame extends JFrame {
             BufferedReader reader = new BufferedReader(new FileReader("users.txt"));
             String line;
             currentUser = new User(habitTracker.getUsername(), habitTracker,1);
+            users.add(currentUser);
             while ((line = reader.readLine())!=null){
-                if ( !line.equals(currentUser)) {
+                if ( !line.equals(currentUser.getUsername())) {
                     users.add(new User(line, habitTracker));
                 }
             }
@@ -78,10 +79,7 @@ public class LeaderboardFrame extends JFrame {
         labels[0] = new JLabel("#");
         labels[1] = new JLabel("Username");
         labels[2] = new JLabel("Score");
-        leaderboard.add(labels[0]);
-        leaderboard.add(labels[1]);
-        leaderboard.add(labels[2]);
-        for (int i = 3; i < 3*users.size(); i++){
+        for (int i = 3; i < 3*users.size()+3; i++){
             labels[i] = new JLabel(Integer.toString(i));
             leaderboard.add(labels[i]);
         }
@@ -110,6 +108,7 @@ public class LeaderboardFrame extends JFrame {
         sortHabits(toSort, comparison);
         //then for each one in order, add the username and the score
         for (int i = 0; i < toSort.size(); i++){
+            System.out.println(users.size());
             labels[(3*i)+3].setText(Integer.toString(i+1));
             leaderboard.add(labels[(3*i)+3]);
             labels[(3*i)+4].setText(toSort.get(i).getUsername());
