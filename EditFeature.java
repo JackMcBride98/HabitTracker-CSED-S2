@@ -31,7 +31,9 @@ public class EditFeature extends JFrame{
 	    
 	    changeName.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		changeName(input.getText());
+				if (!input.getText().equals(null) && !input.getText().equals("")){
+					changeName(input.getText());
+				}
 	    	}
 	    });
 	    

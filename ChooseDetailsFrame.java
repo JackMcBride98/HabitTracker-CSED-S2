@@ -54,7 +54,7 @@ public class ChooseDetailsFrame extends JFrame{
 			}
 		});
 		
-		revalidate();
+		pack();
 		this.setVisible(true);
 		
 
@@ -69,7 +69,7 @@ public class ChooseDetailsFrame extends JFrame{
 		add(dayName);
 		add(checkBox);
 		//System.out.println("Adding day " + day + " to selector");
-		revalidate();
+		pack();
 		
 	}
 	

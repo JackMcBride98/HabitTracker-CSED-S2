@@ -129,29 +129,34 @@ public class LeaderboardFrame extends JFrame {
     }
 
     public void sortHabits(ArrayList<Habit> toSort, String by){
-        boolean swapped;
-        do {
-            swapped = false;
-            for (int i = 0; i < toSort.size()-1; i++) {
-                if (by.equals("Days Completed")) {
-                    if (toSort.get(i).getHistory().size() > toSort.get(i + 1).getHistory().size()) {
-                        Collections.swap(toSort, i, i + 1);
-                        swapped = true;
-                    }
-                }
-                if (by.equals("Percentage")) {
-                    if (toSort.get(i).getPercentage() > toSort.get(i+1).getPercentage()){
-                        Collections.swap(toSort, i, i +1);
-                        swapped = true;
-                    }
-                }
-                if (by.equals("Streak")) {
-                    if (toSort.get(i).getStreak() > toSort.get(i+1).getStreak()){
-                        Collections.swap(toSort,i,i+1);
-                        swapped = true;
-                    }
-                }
+        
+			int temp = 0;
+			int n = toSort.size();
+            for (int i = 0; i < n-1; i++) {
+				for(int j = 0; j < n-i-1; j++){	
+					if (by.equals("Days Completed")) {
+						if (toSort.get(j+1).getHistory().size() > toSort.get(j).getHistory().size()) {
+							temp = toSort.get(j+i).getHistory().size();
+							Collections.swap(toSort, j+1, j);
+						
+						}
+					}
+					if (by.equals("Percentage")) {
+						if (toSort.get(j+1).getPercentage() > toSort.get(j).getPercentage()){
+							Collections.swap(toSort, j+1, j);
+							
+						}
+					}
+					if (by.equals("Streak")) {
+						if (toSort.get(j+1).getStreak() > toSort.get(j).getStreak()){
+							Collections.swap(toSort,j+1,j);
+							;
+						}
+					}
+				}
             }
-        } while (swapped);
+       
     }
+
+	
 }

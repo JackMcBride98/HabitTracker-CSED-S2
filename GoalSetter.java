@@ -22,8 +22,6 @@ public class GoalSetter extends JFrame{
 		//Add drop down menu for selecting habit, frequency to be completed (?) and an ok button.
 		//Fuck knows how this will be displayed in habit tracker, just assign a variable for now? IDEA: int goalTarget(nstc) int = times per day. another variable for doing per week, month.
 		
-		habit = habitTracker.getHabit(habitNo);
-		
 		this.habitTracker = habitTracker;
 		setLayout(new FlowLayout());
 		
@@ -53,6 +51,8 @@ public class GoalSetter extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if (!freqInput.getText().equals("")){					
 					frequency = Integer.parseInt(freqInput.getText());
+					habitNo = habitSelect.getSelectedIndex();		
+
 					setValues();
 					dispose();
 					habitTracker.setVisible(true);
@@ -61,12 +61,12 @@ public class GoalSetter extends JFrame{
 			}
 		});
 		
-		revalidate();
+		pack();
 		
 	}
 	
 	private void setValues(){
-		Habit habit;
+	
 		habit = habitTracker.getHabit(habitNo);
 		habit.setHasGoal(true);
 		habit.setGoalType(goalType);
