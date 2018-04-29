@@ -23,6 +23,7 @@ public class DailyChecklistPanel extends JPanel {
         }
         this.habits = habits;
         for (Habit h: habits){
+				h.setBackground();
                 add(h);
             }
         }

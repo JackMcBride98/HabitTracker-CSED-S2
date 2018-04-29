@@ -174,7 +174,7 @@ public class Habit extends JPanel {
 		updatePercentage();
 		add(percentage);
 		detailsButton.setText("Hide Info");
-		habitTracker.revalidate();
+		//habitTracker.revalidate();
 		if (hasGoal){
 			System.out.println("Displaying goal status");
 			goalLabel = new JLabel("You have completed " + goalTracker.getCompletion() + "% of your goal!");
@@ -184,11 +184,12 @@ public class Habit extends JPanel {
 			System.out.println("NOP");
 		}
 		
-		habitTracker.revalidate();
+		//habitTracker.revalidate();
+		habitTracker.pack();
 	}
 
 	public void updateStreak(){
-        streaks.setText("Streak: " + getStreak());
+        streaks.setText("Streak: " + getStreak() + ".  ");
         //revalidate();
     }
 
@@ -217,7 +218,7 @@ public class Habit extends JPanel {
     }
 
     public void updatePercentage(){
-        percentage.setText("Percentage Complete: " + getPercentage() + "%");
+        percentage.setText("Percentage Complete: " + getPercentage() + "%. ");
         //revalidate();
     }
 
@@ -385,7 +386,7 @@ public class Habit extends JPanel {
 	}
 	
 	public void setGoal(int val){
-		System.out.println("Val = " + val);
+		//System.out.println("Val = " + val);
 		hasGoal = true;
 		goal = val;
 		goalTracker = new GoalTracker(this, goal);
@@ -394,5 +395,15 @@ public class Habit extends JPanel {
 	
 	public GoalTracker getGoalTracker(){
 		return goalTracker;
+	}
+	
+	public void setBackground(){
+		  if ( !days[new Date().getDayOfWeek()-1]){
+            setOpaque(true);
+            setBackground(java.awt.Color.gray);
+            checkBox.setOpaque(true);
+            checkBox.setBackground(java.awt.Color.gray);
+
+        }
 	}
 }
